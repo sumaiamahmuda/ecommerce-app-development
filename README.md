@@ -1,4 +1,4 @@
-<h2 align= "center"> E-Shop (ecommerce web development) </h2> <br> 
+<h2 align= "center"> E-Shop (ecommerce app development) </h2> <br> 
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
@@ -58,3 +58,4 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
