@@ -1,7 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { ModeratorService } from "./moderator.service";
 
 @Controller("/moderator")
 export class ModeratorController {
+
+    constructor(private moderatorService: ModeratorService){}
+
     @Get()
     indexPath(): any {
         return "This is the default path for ./moderation module";
@@ -9,7 +13,7 @@ export class ModeratorController {
 
     @Get("/index")
     index(): any {
-        return "This is the Index path for moderator module";
+        return this.moderatorService.getIndex();
     }
 
     @Get("/getbyname/:name")
