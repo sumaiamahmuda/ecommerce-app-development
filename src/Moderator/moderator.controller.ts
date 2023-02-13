@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ModeratorService } from "./moderator.service";
+import { ModeratorDTO } from "./moderator.dto";
 
 @Controller("/moderator")
 export class ModeratorController {
@@ -70,11 +71,23 @@ export class ModeratorController {
     //transformation lab-2
     //practice for transformation
 
-    @Get("search/:id")
+    @Get("/search/:id")
     searchById(@Param('id', ParseIntPipe) id:number){
         return this.moderatorService.searchById(id);
     }
 
+    @Get("/register/readAgreement")
+    readTurmsAndConditions(@Query ('read', ParseBoolPipe)read?:boolean){
+        return this.moderatorService.readTurmsAndConditions(read);
+    }
+    
+    @Post("/register")
+    @UsePipes(new ValidationPipe())
+    register(@Body() moderatorDTO: ModeratorDTO): any{
+        return this.moderatorService.register(moderatorDTO);
+    }
+
+    
 
 
 
