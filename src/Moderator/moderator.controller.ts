@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ModeratorService } from "./moderator.service";
+import { ModeratorDTO } from "./moderator.dto";
 
 @Controller("/moderator")
 export class ModeratorController {
@@ -8,47 +9,12 @@ export class ModeratorController {
 
     @Get()
     indexPath(): any {
-        return "This is the default path for ./moderation module";
+        return this.moderatorService.defaultPath();
     }
 
     @Get("/index")
     index(): any {
         return this.moderatorService.getIndex();
-    }
-
-    @Get("/getbyname/:name")
-    getByName(@Param() obj): string {
-        return "Moderator name is " + obj.name + " get by URL input!";
-    }
-
-    @Get("/getbyall/:name/:id")
-    getByAll(@Param() obj): string {
-        return "Moderator name is " + obj.name + " and ID: "+ obj.id + " get by URL input!";
-    }
-
-    @Post("/register/:name/:id/:username/:password")
-    register(@Param() obj): string {
-        return "Moderator name is " + obj.name + " and ID: "+ obj.id + " and username: "+ obj.username + " and password: "+ obj.password + " register!";
-    }
-
-    @Post("/login/:username/:password")
-    login(@Param() obj): string {
-        return "Moderator username is " + obj.username + " and password: "+ obj.password + " login!";
-    }
-
-    @Put("/addModerator")
-    addModerator(
-        @Body("name") name:string,
-        @Body("id") id:string,
-        @Body("username") username:string,
-        @Body("password") password:string
-    ){
-        return "Moderator name is " + name + " and ID: "+ id + " and username: "+ username + " and password: "+ password + " add!";
-    }
-
-    @Post("/searchModeratorByName")
-    searchModerator(@Body("name") name:string): any {
-        return "Search by Moderator by name: "+ name;
     }
 
     @Post("/searchModeratorById")
@@ -65,12 +31,67 @@ export class ModeratorController {
     getUserByIDName(@Query() qry:any): any {
       return "Deleted" + qry.name;
     }  
-    //here id is undefined! Why?
 
     @Get("/getaModerator")
     getAllUsers(@Query() qry:any): any {
         return "name; " + qry.name + " id: " + qry.id;
     }
+
+    @Post("/registerUrl/:name/:id/:username/:password")
+    registerUrl(@Param() obj): string {
+        return this.moderatorService.registerUrl(obj);
+    }
+
+    @Post("/login/:username/:password")
+    login(@Param() obj): string {
+        return this.moderatorService.loginUrl(obj);
+    }
+
+    @Put("/addModeratorBody")
+    addModerator(
+        @Body("name") name:string,
+        @Body("id") id:string,
+        @Body("username") username:string,
+        @Body("password") password:string
+    ){
+        return this.moderatorService.regesterByBody(Object);
+    }
+
+    @Get("/getbyname/:name")
+    getByName(@Param() obj): string {
+        return this.moderatorService.getByName(obj.name);
+    }
+
+    @Get("/getbyall/:name/:id")
+    getByAll(@Param() obj): string {
+        return this.moderatorService.getByAll(obj);
+    }
+
+
+    //transformation lab-2
+    //practice for transformation
+
+    @Get("/search/:id")
+    searchById(@Param('id', ParseIntPipe) id:number){
+        return this.moderatorService.searchById(id);
+    }
+
+    @Get("/register/readAgreement")
+    readTurmsAndConditions(@Query ('read', ParseBoolPipe)read?:boolean){
+        return this.moderatorService.readTurmsAndConditions(read);
+    }
+    
+    @Post("/register")
+    @UsePipes(new ValidationPipe())
+    register(@Body() moderatorDTO: ModeratorDTO): any{
+        return this.moderatorService.register(moderatorDTO);
+    }
+
+    
+
+
+
+
 
 
 
