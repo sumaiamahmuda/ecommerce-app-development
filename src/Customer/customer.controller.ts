@@ -63,6 +63,17 @@ export class customerController{
     @Param('id') productId:number):  any {
     return "Customer deleted name: " + productName + " & id: " + productId + " \nSuccessfully deleted...";
   }
+
+
+
+
+
+@Get("/user/:id")
+getuser(@Param('id',ParseIntPipe) id:number):any{
+  return this.customerService.getuser(id);
+}
+
+
   @Post("/insertuser")
     @UsePipes(new ValidationPipe())
     insertUser(@Body() mydto:customerForm): any {
@@ -76,7 +87,12 @@ export class customerController{
       @Body("id") id:number
       ): any {
     return this.customerService.updateUser(name, id);
-    
 
+}
+
+@Delete("/deleteuser/:id")
+deleteuserbyid(@Param('id', ParseIntPipe) id: number): any {
+  return this.customerService.deleteuserbyid(id);
+ 
 }
 }
